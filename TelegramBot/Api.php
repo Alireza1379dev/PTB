@@ -8,7 +8,8 @@ class Api {
     
     private $methods = [
         "sendMessage",
-        "deleteMessage"
+        "deleteMessage",
+        "copyMessage",
     ];
     
     public function __construct($token) {
