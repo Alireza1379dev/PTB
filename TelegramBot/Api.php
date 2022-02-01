@@ -11,6 +11,7 @@ class Api {
         "deleteMessage",
         "copyMessage",
         "editMessageText",
+        "sendPhoto",
     ];
     
     public function __construct($token) {
