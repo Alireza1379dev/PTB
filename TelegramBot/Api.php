@@ -6,6 +6,10 @@ class Api {
     
     private $token;
     
+    private $settings;
+    
+    private $updates;
+    
     private $methods = [
         "sendMessage",
         "deleteMessage",
@@ -46,9 +50,15 @@ class Api {
 
     ];
     
-    public function __construct($token) {
+    public function __construct($token, array $settings = []) {
         $this->token = $token;
-        $this->getUpdates();
+        $this->settings = $settings;
+        
+        if ($this->settings["updates"] == "getupdate") {
+            $this->updates = $this->getUpdates();
+        } elseif ($this->settings["updates"] == "webhook") {
+            $this->updates = json_decode(file_get_contents("php://input"));
+        }
     }
     
     public function __call($method, $args) {
@@ -71,7 +81,7 @@ class Api {
             ]);
             if (isset($updates->result) && !empty($updates->result)) {
                 foreach ($updates->result as $update) {
-                    call_user_func([$this, "bot"], $update);
+                    call_user_func([$this, "bot"], $this->updates);
                 }
                 $offset = $update->update_id + 1;
             }
