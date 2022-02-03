@@ -5,8 +5,8 @@ require "TelegramBot/Api.php";
 use TelegramBot\Api;
 
 class Bot extends Api {
-    public function __construct($token) {
-        parent::__construct($token);
+    public function __construct($token, array $settings = []) {
+        parent::__construct($token, $settings);
     }
     
     public function bot($update) {
@@ -20,4 +20,6 @@ class Bot extends Api {
     }
 }
 
-$bot = new bot("2084151219:AAGsJXRLaAK0nI6hYYzw3EBNPEKLVHX-54A");
+$settings["updates"] = "getupdate";
+
+$bot = new bot("2084151219:AAEhJBWvcxz7W-ax61oW8R2JKLqGLtniWNQ", $settings);

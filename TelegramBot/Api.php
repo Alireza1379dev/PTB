@@ -53,9 +53,8 @@ class Api {
     public function __construct($token, array $settings = []) {
         $this->token = $token;
         $this->settings = $settings;
-        
         if ($this->settings["updates"] == "getupdate") {
-            $this->updates = $this->getUpdates();
+            $this->getUpdates();
         } elseif ($this->settings["updates"] == "webhook") {
             $this->updates = json_decode(file_get_contents("php://input"));
         }
@@ -81,6 +80,7 @@ class Api {
             ]);
             if (isset($updates->result) && !empty($updates->result)) {
                 foreach ($updates->result as $update) {
+                    $this->updates = $update;
                     call_user_func([$this, "bot"], $this->updates);
                 }
                 $offset = $update->update_id + 1;
