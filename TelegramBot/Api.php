@@ -3,8 +3,8 @@
 namespace TelegramBot;
 
 class Api {
-    
     private $token;
+    private $settings;
     
     private $methods = [
         "sendMessage",
@@ -46,8 +46,10 @@ class Api {
 
     ];
     
-    public function __construct($token) {
+    public function __construct($token, array $settings) {
         $this->token = $token;
+        $this->settings = $settings;
+
         $this->getUpdates();
     }
     
@@ -89,5 +91,32 @@ class Api {
         $result = curl_exec($ch);
         curl_close($ch);
         return json_decode($result);
+    }
+
+    private function logger($log) {
+        $log_file = fopen("PTB.log", "a") or die("Logger : Unable to open file!");
+        fwrite($log_file,$log);
+        fclose($log_file);
+
+    }
+
+    private function restartlogger() {
+        $logfile = fopen("PTB.log", "w");
+        $this->logger("restarting Logger...");
+
+    }
+
+if (isset($settings["Logger"])) {
+    if (!file_exists("PTB.log")) {
+        $this->logger("PTB started ! \n thanks for using ♡♡♡ \n  Copyright (C) " . date("Y"));
+
+    }
+}
+    if (isset($settings["max_log_size"])) {
+        $log_size = filesize("PTB.log")/1024;
+        if ($log_size < $settings["max_log_size"]) {
+            unlink("PTB.log");
+            $this->restartlogger();
+        }
     }
 }
